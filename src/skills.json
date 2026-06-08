@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Antigravity",
+    "img": "https://www.google.com/s2/favicons?domain=antigravity.google&sz=64",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-2.114813194468747deg)"
+  },
+  {
+    "name": "C",
+    "img": "https://cdn.simpleicons.org/c/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(1.7376206384899096deg)"
+  },
+  {
+    "name": "CSS",
+    "img": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(1.090524967464102deg)"
+  },
+  {
+    "name": "Docker",
+    "img": "https://cdn.simpleicons.org/docker/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(2.3460088153545824deg)"
+  },
+  {
+    "name": "Git",
+    "img": "https://cdn.simpleicons.org/git/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-2.439252043553145deg)"
+  },
+  {
+    "name": "Google Cloud",
+    "img": "https://cdn.simpleicons.org/googlecloud/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-1.4160938937401069deg)"
+  },
+  {
+    "name": "Google Colab",
+    "img": "https://cdn.simpleicons.org/googlecolab/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(0.9333301852354823deg)"
+  },
+  {
+    "name": "Google Drive",
+    "img": "https://cdn.simpleicons.org/googledrive/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(2.6695522396379676deg)"
+  },
+  {
+    "name": "HTML",
+    "img": "https://cdn.simpleicons.org/html5/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(1.810409735244395deg)"
+  },
+  {
+    "name": "Java",
+    "img": "https://cdn.simpleicons.org/openjdk/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-1.3629932552147088deg)"
+  },
+  {
+    "name": "JavaScript",
+    "img": "https://cdn.simpleicons.org/javascript/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-1.6156856831339166deg)"
+  },
+  {
+    "name": "MongoDB",
+    "img": "https://cdn.simpleicons.org/mongodb/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(0.5042995077672545deg)"
+  },
+  {
+    "name": "MySQL",
+    "img": "https://cdn.simpleicons.org/mysql/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(1.8499897677238044deg)"
+  },
+  {
+    "name": "Node.js",
+    "img": "https://cdn.simpleicons.org/nodedotjs/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(1.8417492183318487deg)"
+  },
+  {
+    "name": "PostgreSQL",
+    "img": "https://cdn.simpleicons.org/postgresql/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(2.398304617460184deg)"
+  },
+  {
+    "name": "TailwindCSS",
+    "img": "https://cdn.simpleicons.org/tailwindcss/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-1.3575580908111604deg)"
+  },
+  {
+    "name": "Telethon",
+    "img": "https://cdn.simpleicons.org/telegram/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-1.3347801722724744deg)"
+  },
+  {
+    "name": "TypeScript",
+    "img": "https://cdn.simpleicons.org/typescript/ffffff",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-2.1497569555160125deg)"
+  },
+  {
+    "name": "VS Code",
+    "img": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+    "style": "z-index:1;opacity:0;transform:scale(0.7) rotate(-0.8170443030387529deg)"
+  }
+]
