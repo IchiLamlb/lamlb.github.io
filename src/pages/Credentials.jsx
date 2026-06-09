@@ -79,7 +79,7 @@ export default function Credentials() {
           {filteredCreds.map((cred, idx) => {
             const isLeft = idx % 2 === 0;
             return (
-              <div key={idx} className={`flex items-center w-full gap-0 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div key={idx} className={`flex items-center w-full gap-0 group-timeline-item ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div className={`w-[calc(50%-28px)] flex ${isLeft ? 'justify-end' : 'justify-start'}`}>
                   <div className="w-full max-w-sm cred-card-container">
                     <div className="cred-card-inner">
@@ -126,8 +126,8 @@ export default function Credentials() {
                   </div>
                 </div>
                 <div className="w-14 flex flex-col items-center shrink-0 relative z-10">
-                  <div className="w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-300 bg-dark-200 border-gold/50 scale-100">
-                    <div className="w-2 h-2 rounded-full transition-colors duration-300 bg-gold/60"></div>
+                  <div className="w-7 h-7 rounded-full border-2 flex items-center justify-center timeline-dot-outer">
+                    <div className="w-2 h-2 rounded-full timeline-dot-inner"></div>
                   </div>
                 </div>
                 <div className="w-[calc(50%-28px)]"></div>
@@ -295,6 +295,25 @@ export default function Credentials() {
         }
         .cred-card-container:hover .cred-card-back {
           border-color: rgba(191, 90, 242, 0.4);
+        }
+        .timeline-dot-outer {
+          background-color: #1a1a1a;
+          border-color: rgba(191, 90, 242, 0.4);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .timeline-dot-inner {
+          background-color: rgba(191, 90, 242, 0.6);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .group-timeline-item:hover .timeline-dot-outer {
+          border-color: #bf5af2;
+          transform: scale(1.15);
+          box-shadow: 0 0 12px rgba(191, 90, 242, 0.6);
+          background-color: rgba(191, 90, 242, 0.1);
+        }
+        .group-timeline-item:hover .timeline-dot-inner {
+          background-color: #bf5af2;
+          transform: scale(1.2);
         }
         @keyframes fadeIn {
           from { opacity: 0; }

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import MainPage from './pages/MainPage';
+import Resume from './pages/Resume';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="credentials" element={<MainPage />} />
           <Route path="contact" element={<MainPage />} />
         </Route>
+        <Route path="resume" element={<Resume />} />
       </Routes>
     </BrowserRouter>
   );

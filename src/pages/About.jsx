@@ -55,18 +55,20 @@ export default function About() {
         <h1 className="text-4xl font-bold text-white gold-underline pb-2">About Me</h1>
       </div>
 
-      <div className="bg-dark-100 border border-dark-300 rounded-2xl p-6 flex flex-col gap-4 animate-[slideUp_0.5s_ease-out_0.2s_forwards]" style={{ opacity: 0, transform: 'translateY(20px)' }}>
-        {/* The original site has an API that loads the about text, here is the skeleton from the initial render, but we can also put static text if we wanted. I'll stick to the exact HTML structure for now. */}
-        <div className="space-y-3">
-          <div className="space-y-2">
-            <div className="bg-gradient-to-r from-dark-200 via-dark-300 to-dark-200 bg-[length:200%_100%] rounded-lg animate-pulse" style={{ width: '100%', height: '1rem' }}></div>
-          </div>
-          <div className="space-y-2">
-            <div className="bg-gradient-to-r from-dark-200 via-dark-300 to-dark-200 bg-[length:200%_100%] rounded-lg animate-pulse" style={{ width: '100%', height: '1rem' }}></div>
-          </div>
-          <div className="space-y-2">
-            <div className="bg-gradient-to-r from-dark-200 via-dark-300 to-dark-200 bg-[length:200%_100%] rounded-lg animate-pulse" style={{ width: '80%', height: '1rem' }}></div>
-          </div>
+      <div className="bg-dark-100 border border-dark-300 rounded-2xl p-6 md:p-8 flex flex-col gap-6 animate-[slideUp_0.5s_ease-out_0.2s_forwards]" style={{ opacity: 0, transform: 'translateY(20px)' }}>
+        <div className="space-y-4 text-gray-300 text-sm md:text-base leading-relaxed">
+          <p className="text-white font-medium text-lg md:text-xl leading-snug">
+            Hi there! I'm <span className="text-gold font-semibold">Le Bao Lam</span>, a backend-focused Software Developer dedicated to building efficient, scalable, and robust systems.
+          </p>
+          <p>
+            With a solid foundation from <span className="text-white font-semibold">Hanoi University of Science and Technology (HUST)</span>, where I graduated with an Excellent Degree in Computer Science & Engineering, I have cultivated a deep passion for system architecture, microservices, and database optimization.
+          </p>
+          <p>
+            Currently, as a Backend Developer at <span className="text-gold">SafeGate</span>, I architect high-performance NestJS microservices, optimize PostgreSQL database queries, and manage Redis caching to keep application response times to a minimum. Previously, during my internship at <span className="text-white font-medium">Viettel Network</span>, I gained hands-on experience handling massive telco log pipelines with Java, Spring Boot, Kafka, and Elasticsearch.
+          </p>
+          <p>
+            I thrive in Agile/Scrum environments, value clean code, and love automating deployment pipelines using Docker. I am constantly exploring cloud technologies and AI integrations to build smarter, more resilient software solutions.
+          </p>
         </div>
       </div>
 

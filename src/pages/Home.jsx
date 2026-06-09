@@ -311,7 +311,12 @@ export default function Home() {
           Building intelligent systems at the intersection of <span className="text-white font-medium">full-stack development</span> and <span className="text-white font-medium">automation</span>.
         </p>
         <div className="animate-[slideUp_0.5s_ease-out_0.4s_forwards]" style={{ opacity: 0, transform: 'translateY(20px)' }}>
-          <a className="inline-flex items-center gap-2 px-6 py-3 border border-dark-300 text-gray-300 rounded-xl hover:border-gold hover:text-gold transition-colors" href="/resume">
+          <a
+            className="inline-flex items-center gap-2 px-6 py-3 border border-dark-300 text-gray-300 rounded-xl hover:border-gold hover:text-gold transition-colors"
+            href="/resume"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Resume <Download size={16} />
           </a>
         </div>
