@@ -137,91 +137,14 @@ export default function ProfileSidebar({ isMobile = false }) {
   // Desktop Layout
   return (
     <div
-      className="hidden lg:flex flex-col bg-dark-100 border border-dark-300 rounded-3xl sticky top-24 self-start shadow-xl transition-all duration-300 ease-in-out relative overflow-hidden"
-      style={{ width: isExpanded ? '280px' : '88px', height: 'fit-content' }}
+      className="hidden lg:flex flex-col bg-dark-100 border border-dark-300 rounded-3xl sticky top-24 self-start shadow-xl w-[280px] h-fit relative overflow-hidden"
     >
-      {isExpanded ? (
-        // Expanded State
-        <div className="p-5 w-full flex flex-col animate-[fadeIn_0.3s_ease-out] relative">
-          {/* Collapse Button */}
-          <button
-            onClick={() => setIsExpanded(false)}
-            className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-dark-200 border border-dark-300 flex items-center justify-center text-gold hover:border-gold/50 transition-colors cursor-pointer"
-            title="Collapse Sidebar"
-          >
-            <ChevronLeft size={14} />
-          </button>
-
-          {/* User Profile Header */}
-          <div className="flex items-center gap-3 mt-4 mb-5">
-            <div
-              className="rounded-2xl bg-dark-200 border border-dark-300 overflow-hidden shadow-md shrink-0"
-              style={{ width: '60px', height: '60px' }}
-            >
-              <img
-                src="/assets/avatar.jpg"
-                alt="Le Bao Lam"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="flex-1 min-w-0 pr-6">
-              <h2 className="font-bold text-white text-sm tracking-wide truncate">Le Bao Lam</h2>
-              <span
-                className="text-[9px] text-gold bg-dark-200 border border-gold/40 px-2 py-0.5 rounded-full mt-1.5 inline-block font-mono"
-                style={{ textShadow: '0 0 8px rgba(191, 90, 242, 0.4)' }}
-              >
-                Software Developer
-              </span>
-            </div>
-          </div>
-
-          <div className="h-px bg-dark-300/60 w-full mb-5"></div>
-
-          {/* Contact Details List */}
-          <div className="flex flex-col gap-4 mb-5">
-            {contactInfo.map((info, idx) => (
-              <div key={idx} className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-dark-200 border border-dark-300 flex items-center justify-center text-gold shrink-0">
-                  {info.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[9px] uppercase tracking-widest text-gray-500 font-mono">
-                    {info.label}
-                  </p>
-                  <p className="text-xs text-gray-200 mt-0.5 font-medium flex items-center truncate">
-                    {info.value}
-                    {info.action}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="h-px bg-dark-300/60 w-full mb-5"></div>
-
-          {/* Social Icons */}
-          <div className="flex items-center justify-center gap-3">
-            {socialLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-xl bg-dark-200 border border-dark-300 flex items-center justify-center text-gray-400 hover:text-gold hover:border-gold/50 hover:shadow-[0_0_12px_rgba(191,90,242,0.3)] transition-all"
-                aria-label={link.label}
-              >
-                {link.icon}
-              </a>
-            ))}
-          </div>
-        </div>
-      ) : (
-        // Collapsed State
-        <div className="py-6 px-4 w-full flex flex-col items-center justify-between h-[540px] animate-[fadeIn_0.3s_ease-out] relative">
-          {/* Avatar at Top */}
+      <div className="p-5 w-full flex flex-col relative">
+        {/* User Profile Header */}
+        <div className="flex items-center gap-3 mt-4 mb-5">
           <div
-            className="w-12 h-12 rounded-xl bg-dark-200 border border-dark-300 overflow-hidden cursor-pointer shrink-0"
-            onClick={() => setIsExpanded(true)}
+            className="rounded-2xl bg-dark-200 border border-dark-300 overflow-hidden shadow-md shrink-0"
+            style={{ width: '60px', height: '60px' }}
           >
             <img
               src="/assets/avatar.jpg"
@@ -229,34 +152,57 @@ export default function ProfileSidebar({ isMobile = false }) {
               className="h-full w-full object-cover"
             />
           </div>
-
-          {/* Vertical Text in Middle (absolutely positioned to prevent wrapping) */}
-          <div className="flex-1 flex items-center justify-center w-full relative">
-            <div
-              className="text-gold font-mono text-[10px] tracking-[0.25em] uppercase whitespace-nowrap select-none filter drop-shadow-[0_0_4px_rgba(191,90,242,0.35)]"
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%) rotate(90deg)',
-                width: 'max-content',
-                whiteSpace: 'nowrap'
-              }}
+          <div className="flex-1 min-w-0 pr-6">
+            <h2 className="font-bold text-white text-sm tracking-wide truncate">Le Bao Lam</h2>
+            <span
+              className="text-[9px] text-gold bg-dark-200 border border-gold/40 px-2 py-0.5 rounded-full mt-1.5 inline-block font-mono"
+              style={{ textShadow: '0 0 8px rgba(191, 90, 242, 0.4)' }}
             >
               Software Developer
-            </div>
+            </span>
           </div>
-
-          {/* Expand Button at Bottom */}
-          <button
-            onClick={() => setIsExpanded(true)}
-            className="w-8 h-8 rounded-lg bg-dark-200 border border-dark-300 flex items-center justify-center text-gold hover:border-gold hover:shadow-[0_0_8px_rgba(191, 90, 242, 0.4)] transition-all cursor-pointer"
-            title="Expand Sidebar"
-          >
-            <ChevronRight size={14} />
-          </button>
         </div>
-      )}
+
+        <div className="h-px bg-dark-300/60 w-full mb-5"></div>
+
+        {/* Contact Details List */}
+        <div className="flex flex-col gap-4 mb-5">
+          {contactInfo.map((info, idx) => (
+            <div key={idx} className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-dark-200 border border-dark-300 flex items-center justify-center text-gold shrink-0">
+                {info.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] uppercase tracking-widest text-gray-500 font-mono">
+                  {info.label}
+                </p>
+                <p className="text-xs text-gray-200 mt-0.5 font-medium flex items-center truncate">
+                  {info.value}
+                  {info.action}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="h-px bg-dark-300/60 w-full mb-5"></div>
+
+        {/* Social Icons */}
+        <div className="flex items-center justify-center gap-3">
+          {socialLinks.map((link, idx) => (
+            <a
+              key={idx}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-xl bg-dark-200 border border-dark-300 flex items-center justify-center text-gray-400 hover:text-gold hover:border-gold/50 hover:shadow-[0_0_12px_rgba(191,90,242,0.3)] transition-all"
+              aria-label={link.label}
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
