@@ -177,7 +177,7 @@ export default function Contact() {
 
         {/* Mobile Socials */}
         <div className="grid grid-cols-2 gap-3 md:hidden">
-          <a href="lelam7c10tp@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-red-500/70 hover:text-red-400 hover:shadow-[0_0_18px_rgba(239,68,68,0.45),0_0_34px_rgba(239,68,68,0.18)]">
+          <a href="mailto:lelam7c10tp@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-red-500/70 hover:text-red-400 hover:shadow-[0_0_18px_rgba(239,68,68,0.45),0_0_34px_rgba(239,68,68,0.18)]">
             <Mail size={15} /> Mail
           </a>
           <a href="https://github.com/IchiLamlb" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-white/40 hover:text-white hover:shadow-[0_0_18px_rgba(255,255,255,0.28),0_0_34px_rgba(255,255,255,0.1)]">
@@ -186,14 +186,14 @@ export default function Contact() {
           <a href="https://github.com/IchiLamlb" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-blue-500/70 hover:text-blue-400 hover:shadow-[0_0_18px_rgba(59,130,246,0.42),0_0_34px_rgba(59,130,246,0.18)]">
             <Briefcase size={15} /> LinkedIn
           </a>
-          <a href="https://t.me/lamlb24112411" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-sky-500/70 hover:text-sky-400 hover:shadow-[0_0_18px_rgba(14,165,233,0.42),0_0_34px_rgba(14,165,233,0.18)]">
+          <a href="https://t.me/lamlb2411" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 justify-center hover:border-sky-500/70 hover:text-sky-400 hover:shadow-[0_0_18px_rgba(14,165,233,0.42),0_0_34px_rgba(14,165,233,0.18)]">
             <Send size={15} /> Telegram
           </a>
         </div>
 
         {/* Desktop Socials */}
         <div className="hidden md:flex flex-wrap gap-3">
-          <a href="mailto:your-email@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 group hover:border-red-500/70 hover:text-red-400 hover:shadow-[0_0_18px_rgba(239,68,68,0.45),0_0_34px_rgba(239,68,68,0.18)]">
+          <a href="mailto:lelam7c10tp@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-dark-200 border border-dark-300 text-gray-400 text-sm font-medium transition-all duration-200 group hover:border-red-500/70 hover:text-red-400 hover:shadow-[0_0_18px_rgba(239,68,68,0.45),0_0_34px_rgba(239,68,68,0.18)]">
             <Mail size={15} /> Mail
             <ArrowRight size={12} className="opacity-50" />
           </a>
