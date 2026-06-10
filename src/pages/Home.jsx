@@ -51,30 +51,6 @@ const getCountryCode = (country) => {
   return codes[country] || null;
 };
 
-const countryGPS = {
-  'Vietnam': [14.058324, 108.277199],
-  'Viet Nam': [14.058324, 108.277199],
-  'United States': [37.09024, -95.712891],
-  'US': [37.09024, -95.712891],
-  'India': [20.593684, 78.96288],
-  'Philippines': [12.879721, 121.774017],
-  'Pakistan': [30.375321, 69.345116],
-  'Japan': [36.204824, 138.252924],
-  'United Kingdom': [55.378051, -3.435973],
-  'Germany': [51.165691, 10.451526],
-  'France': [46.227638, 2.213749],
-  'Canada': [56.130366, -106.346771],
-  'Australia': [-25.274398, 133.775136],
-  'Brazil': [-14.235004, -51.92528],
-  'Singapore': [1.352083, 103.819836],
-  'Indonesia': [-0.789275, 113.921327],
-  'Thailand': [15.870032, 100.992541],
-  'Malaysia': [4.210484, 101.975766],
-  'China': [35.86166, 104.195397],
-  'South Korea': [35.907757, 127.766922],
-  'Russia': [61.52401, 105.318756]
-};
-
 export default function Home() {
   const [showGeography, setShowGeography] = useState(false);
   const [visitorLoc, setVisitorLoc] = useState(null);
@@ -84,54 +60,92 @@ export default function Home() {
   const [trafficBreakdown, setTrafficBreakdown] = useState([]);
   const [loadingStats, setLoadingStats] = useState(false);
 
-  const [customGPS, setCustomGPS] = useState({});
+  const [resolvedCountries, setResolvedCountries] = useState({});
   const mapRef = useRef(null);
   const leafletMap = useRef(null);
   const markersGroupRef = useRef(null);
+  const geoModalRef = useRef(null);
+
+  // Click outside and ESC to close geography modal
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (showGeography && geoModalRef.current && !geoModalRef.current.contains(event.target)) {
+        setShowGeography(false);
+      }
+    };
+
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && showGeography) {
+        setShowGeography(false);
+      }
+    };
+
+    if (showGeography) {
+      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [showGeography]);
 
   useEffect(() => {
     if (trafficBreakdown.length === 0) return;
 
     const fetchMissingGPS = async () => {
-      const missingCountries = trafficBreakdown
+      const actualCountries = trafficBreakdown.filter(item => item.country !== 'Others' && item.country !== 'Others 🌐');
+      const sortedActual = [...actualCountries].sort((a, b) => b.count - a.count);
+      const top4 = sortedActual.slice(0, 4);
+
+      const missingCountries = top4
         .map(item => item.country)
-        .filter(name => name !== 'Others' && !countryGPS[name] && !customGPS[name]);
+        .filter(name => !resolvedCountries[name]);
 
       if (missingCountries.length === 0) return;
 
-      const newGPS = { ...customGPS };
+      const newResolved = { ...resolvedCountries };
       let updated = false;
 
       for (const country of missingCountries) {
         try {
-          let res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fullText=true&fields=latlng`);
+          let query = country;
+          if (country === 'Viet Nam') query = 'Vietnam';
+          if (country === 'US') query = 'United States';
+
+          let res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(query)}?fullText=true&fields=latlng,cca2`);
           if (!res.ok) {
-            res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fields=latlng`);
+            res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(query)}?fields=latlng,cca2`);
           }
           if (res.ok) {
             const data = await res.json();
-            if (data && data[0] && data[0].latlng) {
-              newGPS[country] = data[0].latlng;
+            if (data && data[0] && data[0].latlng && data[0].cca2) {
+              newResolved[country] = {
+                latlng: data[0].latlng,
+                code: data[0].cca2.toLowerCase()
+              };
               updated = true;
             }
           }
         } catch (error) {
-          console.error(`Failed to fetch GPS for ${country}:`, error);
+          console.error(`Failed to fetch country data for ${country}:`, error);
         }
       }
 
       if (updated) {
-        setCustomGPS(newGPS);
+        setResolvedCountries(newResolved);
       }
     };
 
     fetchMissingGPS();
-  }, [trafficBreakdown]);
+  }, [trafficBreakdown, resolvedCountries]);
 
   useEffect(() => {
     if (!showGeography || !mapRef.current) return;
 
     let map = leafletMap.current;
+    let timer;
 
     const initMap = () => {
       if (!mapRef.current) return;
@@ -145,11 +159,14 @@ export default function Home() {
           minZoom: 1.1,
           maxZoom: 8,
           zoomControl: false,
-          attributionControl: false
+          attributionControl: false,
+          maxBounds: [[-90, -180], [90, 180]],
+          maxBoundsViscosity: 1.0
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          maxZoom: 20
+          maxZoom: 20,
+          noWrap: true
         }).addTo(map);
 
         L.control.zoom({
@@ -164,11 +181,12 @@ export default function Home() {
         markersGroupRef.current.clearLayers();
       }
 
-      const sorted = [...trafficBreakdown].sort((a, b) => b.count - a.count);
-      const top4 = sorted.slice(0, 4);
+      const actualCountries = trafficBreakdown.filter(item => item.country !== 'Others' && item.country !== 'Others 🌐');
+      const sortedActual = [...actualCountries].sort((a, b) => b.count - a.count);
+      const top4 = sortedActual.slice(0, 4);
 
       top4.forEach((item, index) => {
-        const gps = countryGPS[item.country] || customGPS[item.country];
+        const gps = resolvedCountries[item.country]?.latlng;
         if (!gps) return;
 
         const pulsingIcon = L.divIcon({
@@ -208,24 +226,41 @@ export default function Home() {
         document.body.appendChild(script);
       }
     } else {
-      const timer = setTimeout(initMap, 100);
-      return () => clearTimeout(timer);
+      timer = setTimeout(initMap, 100);
     }
 
     return () => {
+      if (timer) clearTimeout(timer);
       if (leafletMap.current) {
         leafletMap.current.remove();
         leafletMap.current = null;
         markersGroupRef.current = null;
       }
     };
-  }, [showGeography, trafficBreakdown, customGPS]);
+  }, [showGeography, trafficBreakdown, resolvedCountries]);
+  const fetchLatestStats = async (showLoading = false) => {
+    if (!VISITOR_API_URL) return;
+    if (showLoading) setLoadingStats(true);
+    try {
+      const statsRes = await fetch(`${VISITOR_API_URL}?action=get`);
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        if (statsData.total && statsData.breakdown) {
+          setTotalViews(statsData.total);
+          setTrafficBreakdown(statsData.breakdown);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching latest visitor stats:', error);
+    } finally {
+      if (showLoading) setLoadingStats(false);
+    }
+  };
 
   useEffect(() => {
     if (!VISITOR_API_URL) return;
 
     const hasVisited = sessionStorage.getItem('portfolio_visited');
-    setLoadingStats(true);
 
     const fetchLocationAndLog = async () => {
       try {
@@ -233,6 +268,7 @@ export default function Home() {
 
         // If first visit in this session, detect country and log it
         if (!hasVisited) {
+          setLoadingStats(true);
           const locRes = await fetch('https://ipapi.co/json/');
           if (locRes.ok) {
             const locData = await locRes.json();
@@ -251,20 +287,13 @@ export default function Home() {
               sessionStorage.setItem('portfolio_visited', 'true');
             }
           }
+          setLoadingStats(false);
         } else {
           // If already logged, just fetch latest counts
-          const statsRes = await fetch(`${VISITOR_API_URL}?action=get`);
-          if (statsRes.ok) {
-            const statsData = await statsRes.json();
-            if (statsData.total && statsData.breakdown) {
-              setTotalViews(statsData.total);
-              setTrafficBreakdown(statsData.breakdown);
-            }
-          }
+          fetchLatestStats(true);
         }
       } catch (error) {
         console.error('Error fetching visitor statistics:', error);
-      } finally {
         setLoadingStats(false);
       }
     };
@@ -272,6 +301,21 @@ export default function Home() {
     fetchLocationAndLog();
   }, []);
 
+  // Polling for real-time visitor stats
+  useEffect(() => {
+    if (!VISITOR_API_URL) return;
+
+    // Fetch immediately on open
+    if (showGeography) {
+      fetchLatestStats(false);
+    }
+
+    // Poll every 10 seconds when modal is open, and every 60 seconds when closed
+    const intervalTime = showGeography ? 10000 : 60000;
+    const interval = setInterval(() => fetchLatestStats(false), intervalTime);
+
+    return () => clearInterval(interval);
+  }, [showGeography]);
   const handleOpenGeography = () => {
     setShowGeography(true);
     if (!visitorLoc) {
@@ -494,12 +538,11 @@ export default function Home() {
       {/* Geography Modal */}
       {showGeography && (
         <div
-          onClick={() => setShowGeography(false)}
           className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease-out]"
           style={{ animation: 'fadeIn 0.2s ease-out' }}
         >
           <div
-            onClick={(e) => e.stopPropagation()}
+            ref={geoModalRef}
             className="border border-dark-300 rounded-3xl p-6 w-full max-w-4xl shadow-2xl relative text-left overflow-y-auto max-h-[95vh]"
             style={{ backgroundColor: '#000000', animation: 'zoomIn 0.3s ease-out' }}
           >
@@ -540,7 +583,7 @@ export default function Home() {
               {/* Right Column: Distribution List */}
               <div className="bg-[#141414] border border-dark-300 rounded-2xl p-5 flex flex-col">
                 <p className="text-[10px] text-gray-500 uppercase tracking-wider font-mono">Distribution</p>
-                <p className="text-xs text-gray-400 font-medium mt-0.5 mb-4 font-mono">Top 4 + other</p>
+                <p className="text-xs text-gray-400 font-medium mt-0.5 mb-4 font-mono">Top 4 + others</p>
 
                 <div className="flex flex-col gap-3 overflow-y-auto max-h-[360px] pr-1">
                   {loadingStats ? (
@@ -550,11 +593,17 @@ export default function Home() {
                     </div>
                   ) : (
                     (() => {
-                      const sorted = [...trafficBreakdown].sort((a, b) => b.count - a.count);
-                      const top4 = sorted.slice(0, 4);
-                      const othersCount = sorted.slice(4).reduce((sum, item) => sum + item.count, 0);
-                      if (othersCount > 0) {
-                        top4.push({ country: 'Others', count: othersCount });
+                      const actualCountries = trafficBreakdown.filter(item => item.country !== 'Others' && item.country !== 'Others 🌐');
+                      const backendOthersItem = trafficBreakdown.find(item => item.country === 'Others' || item.country === 'Others 🌐');
+                      const backendOthersCount = backendOthersItem ? backendOthersItem.count : 0;
+
+                      const sortedActual = [...actualCountries].sort((a, b) => b.count - a.count);
+                      const top4 = sortedActual.slice(0, 4);
+                      const remainingCount = sortedActual.slice(4).reduce((sum, item) => sum + item.count, 0);
+                      const totalOthersCount = remainingCount + backendOthersCount;
+
+                      if (totalOthersCount > 0) {
+                        top4.push({ country: 'Others', count: totalOthersCount });
                       }
 
                       const barGradients = [
@@ -567,7 +616,7 @@ export default function Home() {
 
                       return top4.map((item, index) => {
                         const percentage = totalViews > 0 ? ((item.count / totalViews) * 100).toFixed(1) : 0;
-                        const code = getCountryCode(item.country);
+                        const code = getCountryCode(item.country) || resolvedCountries[item.country]?.code;
                         const gradientStyle = barGradients[index] || barGradients[4];
 
                         return (
@@ -576,16 +625,16 @@ export default function Home() {
                             className="bg-[#1b1b1b] border border-dark-300/80 rounded-xl p-3 flex items-center justify-between gap-4 transition-all hover:border-dark-300"
                           >
                             {/* Left: Flag & Details */}
-                            <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                              <div className="rounded overflow-hidden border border-dark-300/40 bg-dark-200 flex items-center justify-center shrink-0" style={{ width: '48px', height: '32px' }}>
+                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                              <div className="w-8 h-5 rounded overflow-hidden border border-dark-300/40 bg-dark-200 flex items-center justify-center shrink-0">
                                 {code ? (
                                   <img
                                     src={`https://flagcdn.com/h40/${code}.png`}
                                     alt={item.country}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    className="w-full h-full object-cover"
                                   />
                                 ) : (
-                                  <span className="text-lg">🌐</span>
+                                  <span className="text-xs">🌐</span>
                                 )}
                               </div>
                               <div className="flex-1 min-w-0 flex flex-col">
