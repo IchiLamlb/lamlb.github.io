@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { DesktopNav, MobileNav } from './Navigation';
 import { Terminal, Binoculars, ChevronDown } from 'lucide-react';
 import ProfileSidebar from './ProfileSidebar';
+import TerminalModal from './TerminalModal';
 
 export function LoadingScreen() {
   const [visible, setVisible] = useState(true);
@@ -192,11 +193,15 @@ export function LoadingScreen() {
   );
 }
 
-export function ActionButtons() {
+export function ActionButtons({ onContactClick, onTerminalClick }) {
   return (
     <>
       <div className="fixed bottom-40 right-8 z-[35] group/terminal lg:bottom-24">
-        <button className="w-14 h-14 rounded-full bg-gradient-to-br from-[#bf5af2]/20 to-[#bf5af2]/10 border-2 border-[#bf5af2]/60 flex items-center justify-center text-[#bf5af2] hover:border-[#bf5af2] hover:from-[#bf5af2]/30 hover:to-[#bf5af2]/20 transition-all shadow-lg shadow-[#bf5af2]/20" tabIndex="0">
+        <button
+          onClick={onTerminalClick}
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-[#bf5af2]/20 to-[#bf5af2]/10 border-2 border-[#bf5af2]/60 flex items-center justify-center text-[#bf5af2] hover:border-[#bf5af2] hover:from-[#bf5af2]/30 hover:to-[#bf5af2]/20 transition-all shadow-lg shadow-[#bf5af2]/20 cursor-pointer"
+          tabIndex="0"
+        >
           <span className="font-mono text-sm font-bold">&gt;_</span>
         </button>
         <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-dark-200 border border-[#bf5af2]/30 rounded-lg px-3 py-1.5 whitespace-nowrap opacity-0 group-hover/terminal:opacity-100 transition-opacity duration-200 pointer-events-none shadow-xl shadow-black/20 hidden lg:block">
@@ -205,7 +210,11 @@ export function ActionButtons() {
       </div>
       <div className="fixed bottom-24 right-8 z-40 lg:bottom-8">
         <div className="relative group/contact">
-          <button className="w-14 h-14 rounded-full bg-gradient-to-br from-[#bf5af2]/20 to-[#bf5af2]/10 border-2 border-[#bf5af2]/60 flex items-center justify-center text-[#bf5af2] hover:border-[#bf5af2] hover:from-[#bf5af2]/30 hover:to-[#bf5af2]/20 transition-all shadow-lg shadow-[#bf5af2]/20" tabIndex="0">
+          <button
+            onClick={onContactClick}
+            className="w-14 h-14 rounded-full bg-gradient-to-br from-[#bf5af2]/20 to-[#bf5af2]/10 border-2 border-[#bf5af2]/60 flex items-center justify-center text-[#bf5af2] hover:border-[#bf5af2] hover:from-[#bf5af2]/30 hover:to-[#bf5af2]/20 transition-all shadow-lg shadow-[#bf5af2]/20 cursor-pointer"
+            tabIndex="0"
+          >
             <Binoculars size={24} />
           </button>
           <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-dark-200 border border-[#bf5af2]/30 rounded-lg px-3 py-1.5 whitespace-nowrap opacity-0 group-hover/contact:opacity-100 transition-opacity duration-200 pointer-events-none shadow-xl shadow-black/20 hidden lg:block">
@@ -218,15 +227,15 @@ export function ActionButtons() {
 }
 
 export function Layout() {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
   return (
     <>
       <LoadingScreen />
       <DesktopNav />
       <MobileNav />
       <div className="relative z-10 flex min-h-screen">
-        <div className="hidden shrink-0 p-8 pr-4 pt-8 lg:flex">
-          <ProfileSidebar isMobile={false} />
-        </div>
         <main className="min-w-0 flex-1 pt-0 lg:pt-6">
           <div className="px-6 pb-24 lg:px-10 lg:pb-12 lg:pt-20">
             <canvas className="fixed inset-0 pointer-events-none z-0"></canvas>
@@ -234,7 +243,51 @@ export function Layout() {
           </div>
         </main>
       </div>
-      <ActionButtons />
+      <ActionButtons
+        onContactClick={() => setIsProfileOpen(true)}
+        onTerminalClick={() => setIsTerminalOpen(true)}
+      />
+
+      {isProfileOpen && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-[2px] cursor-pointer animate-[fadeIn_0.2s_ease-out]"
+          onClick={() => setIsProfileOpen(false)}
+          style={{ animation: 'fadeIn 0.2s ease-out' }}
+        >
+          <div
+            className="profile-modal-card cursor-default animate-[slideUp_0.3s_ease-out]"
+            onClick={(e) => e.stopPropagation()}
+            style={{ animation: 'slideUp 0.3s ease-out' }}
+          >
+            <ProfileSidebar isMobile={false} />
+          </div>
+        </div>
+      )}
+
+      <TerminalModal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
+
+      <style>{`
+        .profile-modal-card {
+          position: fixed;
+          bottom: 160px;
+          right: 16px;
+          z-index: 50;
+        }
+        @media (min-width: 1024px) {
+          .profile-modal-card {
+            bottom: 96px;
+            right: 32px;
+          }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </>
   );
 }

@@ -7,13 +7,20 @@ import {
 
 export default function ProfileSidebar({ isMobile = false }) {
   const [isExpanded, setIsExpanded] = useState(isMobile ? false : true);
-  const [copied, setCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const handleCopyEmail = (e) => {
     e.stopPropagation();
     navigator.clipboard.writeText('lelam7c10tp@gmail.com');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedKey('email');
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
+  const handleCopyPhoneNumber = (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText('+84793206191');
+    setCopiedKey('phone');
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
   const socialLinks = [
@@ -34,14 +41,23 @@ export default function ProfileSidebar({ isMobile = false }) {
           className="ml-2 p-1 text-gray-500 hover:text-gold rounded transition-colors"
           title="Copy Email"
         >
-          {copied ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
+          {copiedKey === 'email' ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
         </button>
       )
     },
     {
       icon: <Phone size={16} />,
       label: "Phone",
-      value: "+84 96 241 1002"
+      value: "+84 793 206 191",
+      action: (
+        <button
+          onClick={handleCopyPhoneNumber}
+          className="ml-2 p-1 text-gray-500 hover:text-gold rounded transition-colors"
+          title="Copy Phone Number"
+        >
+          {copiedKey === 'phone' ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
+        </button>
+      )
     },
     {
       icon: <Calendar size={16} />,
@@ -137,7 +153,7 @@ export default function ProfileSidebar({ isMobile = false }) {
   // Desktop Layout
   return (
     <div
-      className="hidden lg:flex flex-col bg-dark-100 border border-dark-300 rounded-3xl sticky top-24 self-start shadow-xl w-[280px] h-fit relative overflow-hidden"
+      className="flex flex-col bg-dark-100 border border-dark-300 rounded-3xl shadow-xl w-[280px] h-fit relative overflow-hidden"
     >
       <div className="p-5 w-full flex flex-col relative">
         {/* User Profile Header */}

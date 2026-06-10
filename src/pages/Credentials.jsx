@@ -3,7 +3,7 @@ import { ExternalLink, Download, X } from 'lucide-react';
 import credentialsData from '../credentials.json';
 
 export default function Credentials() {
-  const [creds] = useState(credentialsData);
+  const creds = credentialsData;
   const [selectedCred, setSelectedCred] = useState(null);
   const [activeFilter, setActiveFilter] = useState('All');
 
@@ -21,8 +21,8 @@ export default function Credentials() {
   // Filter Logic
   const filteredCreds = creds.filter(cred => {
     if (activeFilter === 'All') return true;
-    if (activeFilter === 'Hackathon') {
-      return cred.issuer === 'BBDNIIT' || cred.title.toLowerCase().includes('hackathon');
+    if (activeFilter === 'Language') {
+      return cred.tags && cred.tags.some(tag => tag.toLowerCase() === 'language');
     }
     if (activeFilter === 'Certificates') {
       return cred.issuer === 'HackerRank' || cred.issuer === 'Forage' || cred.issuer === 'DataCamp';
@@ -30,7 +30,7 @@ export default function Credentials() {
     return true;
   });
 
-  const hackathonCount = creds.filter(c => c.issuer === 'BBDNIIT' || c.title.toLowerCase().includes('hackathon')).length;
+  const languageCount = creds.filter(c => c.tags && c.tags.some(tag => tag.toLowerCase() === 'language')).length;
   const certCount = creds.filter(c => c.issuer === 'HackerRank' || c.issuer === 'Forage' || c.issuer === 'DataCamp').length;
 
   return (
@@ -53,13 +53,13 @@ export default function Credentials() {
           All
         </button>
         <button
-          onClick={() => setActiveFilter('Hackathon')}
-          className={`px-4 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${activeFilter === 'Hackathon'
+          onClick={() => setActiveFilter('Language')}
+          className={`px-4 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${activeFilter === 'Language'
             ? 'bg-gold text-dark border-gold'
             : 'bg-dark-100 border-dark-300 text-gray-400 hover:border-gold/50 hover:text-white'
             }`}
         >
-          Hackathon<span className="ml-1.5 text-[9px] opacity-60">{hackathonCount}</span>
+          Language<span className="ml-1.5 text-[9px] opacity-60">{languageCount}</span>
         </button>
         <button
           onClick={() => setActiveFilter('Certificates')}
@@ -81,8 +81,8 @@ export default function Credentials() {
             return (
               <div key={idx} className={`flex items-center w-full gap-0 group-timeline-item ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div className={`w-[calc(50%-28px)] flex ${isLeft ? 'justify-end' : 'justify-start'}`}>
-                  <div className="w-full max-w-sm cred-card-container">
-                    <div className="cred-card-inner">
+                  <div className="w-full max-w-sm cred-card-container" style={{ height: '215px' }}>
+                    <div className="cred-card-inner" style={{ height: '100%' }}>
                       {/* Front Side: Certificate Image Preview */}
                       <div className="cred-card-front" onClick={() => setSelectedCred(cred)}>
                         <img src={cred.img} alt={cred.title} className="w-full h-full object-cover" />
@@ -148,8 +148,9 @@ export default function Credentials() {
           <div
             key={idx}
             className="w-full max-w-sm mx-auto cred-card-container"
+            style={{ height: '215px' }}
           >
-            <div className="cred-card-inner">
+            <div className="cred-card-inner" style={{ height: '100%' }}>
               {/* Front Side: Certificate Image Preview */}
               <div className="cred-card-front" onClick={() => setSelectedCred(cred)}>
                 <img src={cred.img} alt={cred.title} className="w-full h-full object-cover" />
@@ -253,11 +254,12 @@ export default function Credentials() {
         .cred-card-container {
           perspective: 1000px;
           width: 100%;
+          height: 215px;
         }
         .cred-card-inner {
           position: relative;
           width: 100%;
-          height: 215px;
+          height: 100%;
           transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
           transform-style: preserve-3d;
         }

@@ -291,10 +291,6 @@ export default function Home() {
 
   return (
     <div className="relative z-10 flex flex-col gap-16">
-      {/* Mobile Avatar Card */}
-      <div className="lg:hidden mb-6 mt-10 animate-[slideDown_0.5s_ease-out_forwards]">
-        <ProfileSidebar isMobile={true} />
-      </div>
 
       {/* Hero Section */}
       <div className="flex flex-col justify-center min-h-[40vh] gap-7 pt-4">
